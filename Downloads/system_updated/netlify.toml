@@ -1,0 +1,76 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+  environment = { NODE_VERSION = "20" }
+
+[functions]
+  node_bundler = "esbuild"
+  # 26 s — Netlify Pro/Team max. Free tier hard-limit is 10 s.
+  timeout = 26
+
+# ── Background Function: OCR intake for large scanned BOQs ───────────────────
+# Background Functions support up to 15-minute execution — enough for 50+ page PDFs.
+# Triggered when the browser detects a PDF/image file > 500 KB (see public/js/intake.js).
+# The browser polls /.netlify/functions/ocr-poll?jobId=<id> every 2 s for the result.
+# Docs: https://docs.netlify.com/functions/background-functions/
+[functions."ocr-intake-background"]
+  timeout = 900
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+# Step fragments are loaded by fetch() from app.js — they must NOT be redirected.
+# The SPA fallback only applies to top-level browser navigations (not file fetches)
+# because Netlify checks the publish directory first when force = false.
+# We explicitly exclude /steps/* and /.netlify/* from the SPA fallback.
+[[redirects]]
+  from   = "/.netlify/*"
+  to     = "/.netlify/:splat"
+  status = 200
+  force  = false
+
+[[redirects]]
+  from   = "/steps/*"
+  to     = "/steps/:splat"
+  status = 200
+  force  = false
+
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+  force  = false
+
+# ─────────────────────────────────────────────────────────────────────
+#  ENVIRONMENT VARIABLES  (set in Netlify Dashboard → Site config → Env vars)
+#
+#  SERPER_API_KEY    — Required. https://serper.dev  (2,500 free/month)
+#  FLARESOLVERR_URL  — Optional. http://your-vps:8191
+#  MISTRAL_API_KEY   — Optional. Cloud OCR fallback. https://console.mistral.ai
+#  OPENAI_API_KEY    — Optional. Alternative cloud OCR. https://platform.openai.com
+# ─────────────────────────────────────────────────────────────────────
+#  LARGE BOQ / OCR FLOW
+#
+#  Files > 500 KB (PDF/image, ~5–10 scanned pages) are automatically routed
+#  by intake.js to the Background Function (ocr-intake-background) which has
+#  a 15-minute timeout. Smaller files go to search-prices via the sync path.
+#
+#  Flow:
+#    1. Browser POSTs file to /.netlify/functions/ocr-intake-background?jobId=<uuid>
+#    2. BG function writes progress to /tmp/<jobId>.json, returns 202 immediately
+#    3. Browser polls /.netlify/functions/ocr-poll?jobId=<uuid> every 2 s
+#    4. OCR progress bar updates from poll response (pagesDone / pagesTotal)
+#    5. When status = 'done', poll response contains the full parsed line items
+#
+#  NOTE: /tmp is ephemeral and instance-local on Netlify. For production at
+#  scale replace the /tmp read/write in ocr-poll.js with Netlify Blobs.
+# ─────────────────────────────────────────────────────────────────────
