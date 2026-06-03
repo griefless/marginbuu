@@ -1,5 +1,0 @@
-[build]
-  command = "npm install"  # ← THIS WAS MISSING
-  publish = "public"
-  functions = "netlify/functions"
-  environment = { NODE_VERSION = "20" }
