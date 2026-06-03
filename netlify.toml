@@ -1,0 +1,42 @@
+[build]
+  command = "npm install"
+  publish = "public"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[functions]
+  node_bundler = "esbuild"
+
+[functions."ocr-intake-background"]
+  timeout = 900
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[redirects]]
+  from   = "/.netlify/*"
+  to     = "/.netlify/:splat"
+  status = 200
+  force  = false
+
+[[redirects]]
+  from   = "/steps/*"
+  to     = "/steps/:splat"
+  status = 200
+  force  = false
+
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
