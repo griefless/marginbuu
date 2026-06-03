@@ -1,52 +1,5 @@
 [build]
+  command = "npm install"  # ← THIS WAS MISSING
   publish = "public"
   functions = "netlify/functions"
   environment = { NODE_VERSION = "20" }
-
-[functions]
-  node_bundler = "esbuild"
-  timeout = 26
-
-[functions."ocr-intake-background"]
-  timeout = 900
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Cache-Control = "no-cache"
-
-# Netlify functions — never redirect these
-[[redirects]]
-  from   = "/.netlify/*"
-  to     = "/.netlify/:splat"
-  status = 200
-  force  = false
-
-# Step HTML fragments — serve them as static files, never redirect
-[[redirects]]
-  from   = "/steps/*"
-  to     = "/steps/:splat"
-  status = 200
-  force  = false
-
-# SPA fallback — all other routes serve index.html
-[[redirects]]
-  from   = "/*"
-  to     = "/index.html"
-  status = 200
-
-# ─────────────────────────────────────────────────────────────────────
-#  ENVIRONMENT VARIABLES  (Netlify Dashboard → Site config → Env vars)
-#
-#  SERPER_API_KEY    — Required. https://serper.dev
-#  FLARESOLVERR_URL  — Optional. http://YOUR_VPS_IP:8191
-#  MISTRAL_API_KEY   — Optional. https://console.mistral.ai
-#  OPENAI_API_KEY    — Optional. https://platform.openai.com
-# ─────────────────────────────────────────────────────────────────────
