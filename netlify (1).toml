@@ -1,0 +1,32 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+  environment = { NODE_VERSION = "20" }
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["canvas", "sharp", "tesseract.js", "pdfjs-dist", "pdf-parse", "mammoth", "xlsx"]
+[functions."*"]
+  timeout = 26
+[functions."ocr-intake-background"]
+  timeout = 900
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+# Step HTML fragments — serve them as static files, never redirect
+[[redirects]]
+  from   = "/steps/*"
+  to     = "/steps/:splat"
+  status = 200
+  force  = false
+# SPA fallback — all other routes serve index.html
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
