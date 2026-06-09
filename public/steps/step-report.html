@@ -1,0 +1,134 @@
+<div class="report-banner" id="report-banner">
+  <div class="rb-left">
+    <h2 id="rb-title">BOQ Price Analysis Report</h2>
+    <p id="rb-sub">Morambol Supplies — Competitive Tender Report</p>
+    <div class="rb-badges">
+      <span class="rb-badge gold">Live Web Scraping</span>
+      <span class="rb-badge">Serper + FlareSolverr</span>
+      <span class="rb-badge">CIDB Compliant</span>
+      <span class="rb-badge">SABS / SANS</span>
+      <span class="rb-badge">VAT 15%</span>
+    </div>
+  </div>
+  <div class="rb-right">
+    <div class="label">Best-price total</div>
+    <div class="amount" id="rb-amount">—</div>
+    <div class="sub">incl. 15% VAT</div>
+  </div>
+</div>
+
+<div class="metrics-row" id="metrics-row"></div>
+
+<div class="tabs" role="tablist">
+  <button class="tab-btn active" role="tab" onclick="showTab('tp-summary',this)">Report Summary</button>
+  <button class="tab-btn" role="tab" onclick="showTab('tp-boq',this)">BOQ Overview</button>
+  <button class="tab-btn" role="tab" onclick="showTab('tp-prices',this)">Supplier Prices</button>
+  <button class="tab-btn" role="tab" onclick="showTab('tp-quote',this)">Best-Price Quote</button>
+  <button class="tab-btn" role="tab" onclick="showTab('tp-labour',this)">Labour &amp; Installation</button>
+  <button class="tab-btn" id="tab-btn-compliance" role="tab" onclick="showTab('tp-compliance',this)">SA Compliance</button>
+</div>
+
+<!-- Tab: Report Summary -->
+<div class="tab-page active" id="tp-summary" role="tabpanel">
+  <div id="summary-content"></div>
+</div>
+
+<!-- Tab: BOQ Overview -->
+<div class="tab-page" id="tp-boq" role="tabpanel">
+  <div class="search-bar">
+    <input type="search" id="boq-q" placeholder="Search items…"
+      oninput="filterBOQ()" aria-label="Search BOQ items">
+    <select id="boq-cat" onchange="filterBOQ()" aria-label="Filter by category">
+      <option value="">All categories</option>
+      <option>Civil &amp; Construction</option>
+      <option>Plumbing &amp; Drainage</option>
+      <option>Electrical &amp; LV Systems</option>
+      <option>Mechanical &amp; HVAC</option>
+      <option>Fencing &amp; Security</option>
+      <option>General Supplies &amp; PPE</option>
+      <option>Health &amp; Medical</option>
+      <option>Electronics &amp; ICT</option>
+      <option>Labour &amp; Installation</option>
+      <option>Unclassified</option>
+    </select>
+  </div>
+  <div class="tbl-wrap">
+    <table class="boq" id="boq-tbl">
+      <thead><tr>
+        <th style="width:52px">Item</th>
+        <th>Description</th>
+        <th style="width:52px">Unit</th>
+        <th style="width:52px;text-align:right">Qty</th>
+        <th style="width:95px;text-align:right">BOQ Rate</th>
+        <th style="width:100px;text-align:right">BOQ Total</th>
+        <th style="width:80px">Category</th>
+      </tr></thead>
+      <tbody id="boq-tbody"></tbody>
+    </table>
+  </div>
+  <div class="tbl-footer" id="boq-footer"></div>
+</div>
+
+<!-- Tab: Supplier Prices -->
+<div class="tab-page" id="tp-prices" role="tabpanel">
+  <div class="metrics-row" id="price-metrics" style="margin-bottom:22px"></div>
+  <div id="price-cards"></div>
+</div>
+
+<!-- Tab: Best-Price Quote -->
+<div class="tab-page" id="tp-quote" role="tabpanel">
+  <div class="export-row">
+    <button class="btn btn-primary btn-sm" onclick="window.print()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round">
+        <polyline points="6 9 6 2 18 2 18 9"/>
+        <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      Print / Save PDF
+    </button>
+    <button class="btn btn-outline btn-sm" onclick="downloadCSV()">Download CSV</button>
+    <button class="btn btn-gold btn-sm"
+      onclick="showTab('tp-compliance',document.getElementById('tab-btn-compliance'))">
+      SA Compliance →
+    </button>
+  </div>
+  <div class="notebox" id="quote-note"></div>
+  <div class="qt-wrap">
+    <table class="qt">
+      <thead><tr>
+        <th style="width:52px">Item</th>
+        <th>Description</th>
+        <th style="width:52px;text-align:center">Unit</th>
+        <th style="width:45px;text-align:right">Qty</th>
+        <th style="width:130px">Best Supplier</th>
+        <th style="width:95px;text-align:right">Unit Rate</th>
+        <th style="width:100px;text-align:right">Amount</th>
+        <th style="width:72px;text-align:right">vs BOQ</th>
+      </tr></thead>
+      <tbody id="qt-tbody"></tbody>
+      <tfoot id="qt-tfoot"></tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- Tab: Labour & Installation -->
+<div class="tab-page" id="tp-labour" role="tabpanel"></div>
+
+<!-- Tab: SA Compliance -->
+<div class="tab-page" id="tp-compliance" role="tabpanel">
+  <div class="output-editor" id="output-editor-panel" style="display:none">
+    <h4>⚙ Productive Output Rate Overrides
+      <span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:8px">
+        Adjust for site conditions — saved to browser, applied on next parse
+      </span>
+    </h4>
+    <div class="output-editor-grid" id="output-editor-grid"></div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="btn btn-sm btn-outline" onclick="saveOutputOverrides()">Save overrides</button>
+      <button class="btn btn-sm btn-outline" onclick="resetOutputOverrides()">Reset to defaults</button>
+    </div>
+  </div>
+  <div class="notebox" id="comp-note"></div>
+  <div class="comp-card" id="comp-list"></div>
+</div>
