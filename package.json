@@ -1,0 +1,25 @@
+{
+  "name": "khuthadzo-supplies",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "KHUTHADZO SUPPLIES — Quantity Surveying Workbench",
+  "scripts": {
+    "dev": "netlify dev",
+    "deploy": "netlify deploy",
+    "deploy:prod": "netlify deploy --prod"
+  },
+  "dependencies": {
+    "xlsx": "0.18.5",
+    "mammoth": "^1.7.0",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.0.379",
+    "sharp": "^0.33.0",
+    "tesseract.js": "^5.0.0",
+    "@netlify/blobs": "^8.0.0",
+    "@netlify/functions": "^2.8.0"
+  },
+  "allowScripts": {
+    "sharp@0.33.5": true,
+    "tesseract.js@5.1.1": true
+  }
+}
