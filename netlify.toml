@@ -1,0 +1,26 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+  command = "echo 'No build step — static zones'"
+
+[functions]
+  node_bundler = "esbuild"
+  # Bundle native deps used by parsing/OCR pipeline
+  external_node_modules = ["sharp", "tesseract.js", "pdfjs-dist", "canvas"]
+
+[functions.parse]
+  memory = 1024
+
+[functions."ocr-intake-background"]
+  memory = 3072
+
+# SPA-style fallback so deep links to zones resolve
+[[redirects]]
+  from = "/zone-1"
+  to = "/zone-1-intake.html"
+  status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
