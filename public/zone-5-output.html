@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KHUTHADZO SUPPLIES — Zone 5 Output</title>
+<link rel="stylesheet" href="css/styles.css">
+</head><body>
+<header class="kh-header"><span class="brand-mark">KHUTHADZO</span><h1>SUPPLIES — QS Workbench</h1></header>
+<nav class="kh-nav"></nav>
+<main>
+  <div class="kh-card no-print">
+    <h2>Zone 5 — Output Generation & Report Engine</h2>
+    <button class="btn" id="generate">Generate Deliverables</button>
+    <button class="btn btn-ghost" id="export-csv">Export Rate Substantiation CSV</button>
+    <button class="btn btn-ghost" onclick="window.print()">Print / Save PDF</button>
+  </div>
+  <div class="kh-card">
+    <h2>Deliverable 1 — Priced BOQ (matches input structure)</h2>
+    <div id="priced-boq"></div>
+  </div>
+  <div class="kh-card"><h2>Deliverable 3 — Variance & Risk</h2><div id="variance-dash"></div></div>
+</main>
+<script src="js/state.js"></script><script src="js/utils.js"></script><script src="js/labour.js"></script>
+<script src="js/compliance.js"></script><script src="js/intake.js"></script><script src="js/review.js"></script>
+<script src="js/processing.js"></script><script src="js/report.js"></script><script src="js/app.js"></script>
+<script>document.getElementById("generate").onclick=KH_REPORT.generateOutput;</script>
+</body></html>

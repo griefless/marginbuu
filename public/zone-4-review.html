@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KHUTHADZO SUPPLIES — Zone 4 Review</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+  integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head><body>
+<header class="kh-header"><span class="brand-mark">KHUTHADZO</span><h1>SUPPLIES — QS Workbench</h1></header>
+<nav class="kh-nav"></nav>
+<main>
+  <div class="kh-card">
+    <h2>Zone 4 — Review, Override & Audit</h2>
+    <table class="kh-table"><thead><tr><th>Description</th><th>Unit</th><th>Qty</th><th>Unit Rate</th><th>Build-up</th><th>Confidence</th><th>Amount</th></tr></thead>
+    <tbody id="review-body"></tbody></table>
+  </div>
+  <div class="kh-card">
+    <h2>Preliminary Components</h2>
+    <table class="kh-table"><thead><tr><th>Item</th><th>Fixed (R)</th><th>Value-related (R)</th><th>Time-related (R)</th></tr></thead>
+    <tbody id="prelim-body"></tbody></table>
+  </div>
+  <button class="btn btn-accent" id="approve">Approve & Generate Output → Zone 5</button>
+</main>
+<script src="js/state.js"></script><script src="js/utils.js"></script><script src="js/labour.js"></script>
+<script src="js/compliance.js"></script><script src="js/intake.js"></script><script src="js/review.js"></script>
+<script src="js/processing.js"></script><script src="js/report.js"></script><script src="js/app.js"></script>
+<script>
+KH_REPORT.renderReview();
+document.getElementById("approve").onclick=KH_REPORT.approveOutput;
+</script>
+</body></html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KHUTHADZO SUPPLIES — Zone 3 Research</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+  integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head><body>
+<header class="kh-header"><span class="brand-mark">KHUTHADZO</span><h1>SUPPLIES — QS Workbench</h1></header>
+<nav class="kh-nav"></nav>
+<main>
+  <div class="kh-card">
+    <h2>Zone 3 — Research Engine & Pricing Core</h2>
+    <button class="btn" id="run-research">Run / Re-run Research</button>
+    <p id="research-note"></p>
+    <table class="kh-table"><thead><tr><th>Item</th><th>Status</th><th>Cleaned Query</th><th>Price / Reason</th><th>Confidence</th><th>Action / Research Links</th></tr></thead>
+    <tbody id="research-body"></tbody></table>
+    <button class="btn btn-accent" id="to-review" disabled>Proceed to Review → Zone 4</button>
+  </div>
+</main>
+<script src="js/state.js"></script><script src="js/utils.js"></script><script src="js/labour.js"></script>
+<script src="js/compliance.js"></script><script src="js/intake.js"></script><script src="js/review.js"></script>
+<script src="js/processing.js"></script><script src="js/report.js"></script><script src="js/app.js"></script>
+<script>
+KH_PROCESSING.renderProgress();
+document.getElementById("run-research").onclick=KH_PROCESSING.runResearch;
+document.getElementById("to-review").onclick=()=>KH_APP.confirmAdvance(3,"zone-4-review.html");
+</script>
+</body></html>

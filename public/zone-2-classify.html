@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KHUTHADZO SUPPLIES — Zone 2 Classify</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+  integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head><body>
+<header class="kh-header"><span class="brand-mark">KHUTHADZO</span><h1>SUPPLIES — QS Workbench</h1></header>
+<nav class="kh-nav"></nav>
+<main>
+  <div class="kh-card">
+    <h2>Zone 2 — Item Classification & Trade Assignment</h2>
+    <div class="tabs">
+      <button class="active" id="tab-active">Active Line Items</button>
+      <button id="tab-excluded">Excluded Rows</button>
+    </div>
+    <div id="active-pane">
+      <table class="kh-table"><thead><tr><th>Item No</th><th>Description</th><th>Unit</th><th>Qty</th><th>Trade</th><th>Pricing Type</th></tr></thead>
+      <tbody id="active-body"></tbody></table>
+    </div>
+    <div id="excluded-pane" style="display:none">
+      <table class="kh-table"><thead><tr><th>Item No</th><th>Description</th><th>Unit</th><th>Qty</th><th>Classification</th><th>Rescue</th></tr></thead>
+      <tbody id="excluded-body"></tbody></table>
+    </div>
+  </div>
+  <div class="kh-card">
+    <h2>Project Parameters</h2>
+    <div class="field"><label>Project location (city/region)</label><input id="p-location"></div>
+    <div class="field"><label>Bargaining council</label><select id="p-council"></select></div>
+    <div class="field"><label>Environmental exposure</label><select id="p-exposure"></select></div>
+    <div class="field"><label>Contingency %</label><input id="p-contingency" type="number" value="0"></div>
+    <button class="btn btn-accent" id="begin-research">Begin Pricing Research → Zone 3</button>
+  </div>
+</main>
+<script src="js/state.js"></script><script src="js/utils.js"></script><script src="js/labour.js"></script>
+<script src="js/compliance.js"></script><script src="js/intake.js"></script><script src="js/review.js"></script>
+<script src="js/processing.js"></script><script src="js/report.js"></script><script src="js/app.js"></script>
+<script>
+KH_REVIEW.initParams(); KH_REVIEW.renderTables();
+document.getElementById("tab-active").onclick=()=>{active.style.display="";excluded.style.display="none";tab_active.classList.add("active");tab_excluded.classList.remove("active");};
+document.getElementById("tab-excluded").onclick=()=>{active.style.display="none";excluded.style.display="";tab_excluded.classList.add("active");tab_active.classList.remove("active");};
+const active=document.getElementById("active-pane"),excluded=document.getElementById("excluded-pane"),tab_active=document.getElementById("tab-active"),tab_excluded=document.getElementById("tab-excluded");
+document.getElementById("begin-research").onclick=KH_REVIEW.beginResearch;
+</script>
+</body></html>

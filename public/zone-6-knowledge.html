@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KHUTHADZO SUPPLIES — Zone 6 Knowledge</title>
+<link rel="stylesheet" href="css/styles.css">
+</head><body>
+<header class="kh-header"><span class="brand-mark">KHUTHADZO</span><h1>SUPPLIES — QS Workbench</h1></header>
+<nav class="kh-nav"></nav>
+<main>
+  <div id="freshness-banner"></div>
+  <div class="kh-card">
+    <h2>Zone 6 — Knowledge Base & Continuous Improvement</h2>
+    <div id="kb-content"></div>
+    <button class="btn" id="refresh-data">Mark Reference Data Refreshed (today)</button>
+  </div>
+</main>
+<script src="js/state.js"></script><script src="js/utils.js"></script><script src="js/labour.js"></script>
+<script src="js/compliance.js"></script><script src="js/intake.js"></script><script src="js/review.js"></script>
+<script src="js/processing.js"></script><script src="js/report.js"></script><script src="js/app.js"></script>
+<script>
+function render(){
+  const kb=KH_STATE.knowledge.read();
+  const age=v=>v?Math.floor((Date.now()-new Date(v))/864e5)+" days":"never";
+  document.getElementById("kb-content").innerHTML=`
+   <h3>Data Freshness</h3>
+   <ul><li>Regional material pricing: ${age(kb.freshness.regionalMaterial)}</li>
+   <li>Bargaining council wages: ${age(kb.freshness.wageSchedules)}</li>
+   <li>Commodity index rates: ${age(kb.freshness.commodityIndex)}</li></ul>
+   <h3>Override Patterns (learning)</h3>
+   <ul>${Object.entries(kb.overrides).map(([k,v])=>`<li>${k}: ${v.length} overrides (mostly ${v.filter(x=>x.direction==="up").length>v.length/2?"upward — recommend baseline increase":"downward"})</li>`).join("")||"<li>None yet</li>"}</ul>
+   <h3>Historical Prices Logged</h3>
+   <ul>${Object.keys(kb.priceHistory).slice(0,20).map(k=>`<li>${k}: ${kb.priceHistory[k].length} record(s)</li>`).join("")||"<li>None yet</li>"}</ul>`;
+}
+render();
+document.getElementById("refresh-data").onclick=()=>{const kb=KH_STATE.knowledge.read();const now=new Date().toISOString();kb.freshness={regionalMaterial:now,wageSchedules:now,commodityIndex:now};KH_STATE.knowledge.write(kb);render();};
+</script>
+</body></html>
